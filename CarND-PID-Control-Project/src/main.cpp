@@ -71,7 +71,10 @@ int main() {
            * NOTE: Feel free to play around with the throttle and speed.
            *   Maybe use another PID controller to control the speed!
            */
-
+          
+          // Updates the Cross Track Error (CTE):
+          pid.UpdateError(cte);
+          
           // Velocity Control
           if(speed >= 0 && speed <= 40){
             throttle = 0.3;
@@ -79,6 +82,7 @@ int main() {
           else {
             throttle = -0.3;
           }
+          
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value 
                     << std::endl;
