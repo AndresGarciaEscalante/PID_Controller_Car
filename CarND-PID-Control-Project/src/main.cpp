@@ -39,10 +39,10 @@ int main() {
    */
   
   // Set the coefficients of the PID controller 
-  double kp = 0.0;
-  double ki = 0.0;
-  double kd = 0.0;
-  pid.Init(kp,ki,kp);
+  double kp = 0.5;
+  double ki = 0.00;
+  double kd = 0.1;
+  pid.Init(kp,ki,kd);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
                      uWS::OpCode opCode) {
@@ -62,7 +62,7 @@ int main() {
           double cte = std::stod(j[1]["cte"].get<string>());
           double speed = std::stod(j[1]["speed"].get<string>());
           double angle = std::stod(j[1]["steering_angle"].get<string>());
-          double steer_value = 0.0; // For a fixed value of steering
+          double steer_value; //Stores the steering value
           double throttle; //Stores the throttle value
  
           /**
@@ -75,14 +75,17 @@ int main() {
           // Updates the Cross Track Error (CTE):
           pid.UpdateError(cte);
           
+          // Calculate the total error and assign the value to the steer value. 
+          steer_value = pid.TotalError();
+
           // Velocity Control
-          if(speed >= 0 && speed <= 40){
+          if(speed >= 0 && speed <= 10){
             throttle = 0.3;
           }
           else {
             throttle = -0.3;
           }
-          
+
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value 
                     << std::endl;
