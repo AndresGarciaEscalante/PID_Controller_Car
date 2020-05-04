@@ -37,6 +37,12 @@ int main() {
   /**
    * TODO: Initialize the pid variable.
    */
+  
+  // Set the coefficients of the PID controller 
+  double kp = 0.0;
+  double ki = 0.0;
+  double kd = 0.0;
+  pid.Init(kp,ki,kp);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
                      uWS::OpCode opCode) {
@@ -67,7 +73,6 @@ int main() {
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value 
                     << std::endl;
-
           json msgJson;
           msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = 0.3;
