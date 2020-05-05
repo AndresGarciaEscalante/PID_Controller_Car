@@ -39,9 +39,9 @@ int main() {
    */
   
   // Set the coefficients of the PID controller 
-  double kp = 0.5;
-  double ki = 0.00;
-  double kd = 0.1;
+  double kp = 0.04; //0.04
+  double ki = 0.005; //0.005
+  double kd = 1;    //1
   pid.Init(kp,ki,kd);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
@@ -64,7 +64,7 @@ int main() {
           double angle = std::stod(j[1]["steering_angle"].get<string>());
           double steer_value; //Stores the steering value
           double throttle; //Stores the throttle value
- 
+
           /**
            * TODO: Calculate steering value here, remember the steering value is
            *   [-1, 1].
@@ -78,12 +78,17 @@ int main() {
           // Calculate the total error and assign the value to the steer value. 
           steer_value = pid.TotalError();
 
-          // Velocity Control
-          if(speed >= 0 && speed <= 10){
+          /// CONTROLLLER: Develop a basic controller that makes the velocity almost constant at 30 mph
+          if(speed >= 0 && speed <= 30){
             throttle = 0.3;
+            // When curves are too closed then reduce the speed of the car
+            if(abs(angle) >= 10){
+              throttle = -0.005;
+            }
           }
+          // Stop pressing the throttle 
           else {
-            throttle = -0.3;
+            throttle = 0.0;
           }
 
           // DEBUG
