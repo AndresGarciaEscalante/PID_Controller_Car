@@ -70,9 +70,9 @@ int main() {
    */
 
   // Set the coefficients of the PID controller 
-  double kp = 0.1381;   // Best values registered 0.04     0.117156     0.1381
-  double ki = 0.000521; // Best values registered 0.0005   0.0075079    0.000521
-  double kd = 0.856;    // Best values registered  1        1.4          1.18
+  double kp = 0.0905;   // Best values registered 0.04     0.117156     0.1381
+  double ki = 0.002021; // Best values registered 0.0005   0.0075079    0.000521
+  double kd = 0.48;    // Best values registered  1        1.4          1.18
   pid.Init(kp,ki,kd);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
@@ -180,8 +180,9 @@ int main() {
               string msg = "42[\"reset\",{}]";
               ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
             }
-
+            // Update the error while in the twiddle options
             else{
+              // In every firtst iterations update the PID parameters
               if(iterations == 0){
                 p[index_pos]+= dp[index_pos];
                 pid.Init(p[0],p[1],p[2]);
