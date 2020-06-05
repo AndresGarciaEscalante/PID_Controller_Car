@@ -1,6 +1,8 @@
 # PID_Controller_Car
 
-![](gif/pid_controller.gif)
+<p align="center">
+  <img src="gif/pid_controller.gif">
+</p>
 
 ## Installation:
 
